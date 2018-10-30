@@ -7,7 +7,7 @@
     </p>
     <hr>
     <h3>Hide elements</h3>
-    <div class="transitions__item">
+    <div class="transitions__item transitions__item--show">
       <p>Transition when hide elements using <b>v-if</b> or <b>v-show</b>.</p>
       <button type="button" name="button" @click="showEx1 = !showEx1">{{ showEx1 ? 'Hide' : 'Show' }}</button>
       <transition name="ex-01">
@@ -16,7 +16,7 @@
     </div>
     <hr>
     <h3>Switch Elements</h3>
-    <div class="transitions__item">
+    <div class="transitions__item transitions__item--if">
       <p>Transition when switch elements using <b>v-if</b> and <b>v-else</b>.</p>
       <transition name="ex-02">
         <button @click="showEx2 = true" key="on" v-if="!showEx2">Turn ON</button>
@@ -25,7 +25,7 @@
     </div>
     <hr>
     <h3>Render Lists</h3>
-    <div class="transitions__item">
+    <div class="transitions__item transitions__item--group">
       <p>Transition when render lists with <b>v-for</b> using transition-group.</p>
       <div>
         <input type="number" step="1" min="0" max="99" v-model="nextNum">
@@ -42,7 +42,7 @@
     </div>
     <hr>
     <h3>Search Lists</h3>
-    <div class="transitions__item">
+    <div class="transitions__item transitions__item--list">
       <p>Transition when render lists with <b>v-for</b> using transition-group.</p>
       <div>
         <input type="text" v-model="searchInList">
@@ -79,7 +79,8 @@ export default {
       return Math.floor(Math.random() * this.list.length)
     },
     add () {
-      this.list.splice(this.randomIndex(), 0, this.nextNum++)
+      if (!this.list.includes(this.nextNum)) this.list.splice(this.randomIndex(), 0, this.nextNum++)
+      else alert('Number already on list!')
     },
     remove () {
       this.list.splice(this.randomIndex(), 1)
@@ -138,6 +139,19 @@ input {
 .transitions {
   &__item {
     margin: 0 10px;
+    &--show {
+      height: 125px;
+    }
+    &--if {
+      height: 90px;
+    }
+    &--group {
+      height: auto;
+      min-height: 220px;
+    }
+    &--list {
+      height: 280px;
+    }
   }
 }
 
@@ -183,10 +197,7 @@ input {
     width: 30px;
     height: 30px;
     transition: all 1s;
-    margin-right: 10px;
-    &:not(:first-child) {
-      margin-left: 5px;
-    }
+    margin: 2.5px 5px;
   }
 }
 
@@ -209,7 +220,7 @@ input {
   }
   &-leave-active {
     align-self: center;
-    width: 98.25%;
+    width: calc(100% - #{36.5px});
     position: absolute;
     height: 0;
   }
